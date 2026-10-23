@@ -13,7 +13,7 @@ notes = st.text_area("Paste your notes here:")
 if st.button("Generate Summary"):
     if notes:
         with st.spinner("Generating summary..."):
-            model = genai.GenerativeModel("gemini-1.5-flash")
+            model = genai.GenerativeModel("gemini-2.0-flash")
             prompt = f"Summarize this text in 5 easy points and make 3 MCQs: {notes}"
             result = model.generate_content(prompt)
             st.success("Here is your summary:")
