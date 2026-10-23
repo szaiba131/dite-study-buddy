@@ -11,13 +11,21 @@ notes = st.text_area("Paste your notes here:")
 
 if st.button("Generate Summary"):
     if notes:
-        with st.spinner("Generating summary..."):
-            prompt = f"Summarize this text in 5 easy points and make 3 MCQs: {notes}"
-            response = client.models.generate_content(
-                model="gemini-2.0-flash",
-                contents=prompt
-            )
-            st.success("Here is your summary:")
-            st.write(response.text)
+        with st.spinner("Generating..."):
+            try:
+                # Naya model jo Google keh raha hai
+                response = client.models.generate_content(
+                    model="gemini-2.5-flash",
+                    contents=f"Summarize this in 5 easy points and make 3 MCQs: {notes}"
+                )
+                st.write(response.text)
+            except Exception as e:
+                # Agar phir bhi error aaye to purana stable model try karo
+                st.warning(f"Naya model try fail, purana model use kar raha hun: {e}")
+                response = client.models.generate_content(
+                    model="gemini-1.5-flash",
+                    contents=f"Summarize this: {notes}"
+                )
+                st.write(response.text)
     else:
-        st.warning("Please paste some notes first.")
+        st.warning("Please paste notes first.")
